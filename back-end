@@ -1,0 +1,409 @@
+<?php
+
+
+
+//
+
+
+
+$app->get('/', function() use ($app) {
+    $app->controllers->indexAction($app);
+});
+
+
+
+$app->get('/egor/add_payment', function() use ($app) {
+    $request = $app->request();
+    $user_id = $request->params('user_id');
+   $sum = $request->params('sum');
+   $balance = $request->params('balance');
+   $time = $request->params('time');
+$mysqli = new mysqli(****);     
+$query = "INSERT into payment (abonent_id, sum, time) values ( '$user_id','$sum','$time')";
+$result = $mysqli->query($query);
+if($result == 1 ){
+                            $query = "UPDATE abonent SET balance = '$balance' where id='$user_id'";
+                             $result = $mysqli->query($query);
+                            $json['success'] = 'all ok!!!';
+                        }else{
+                            $json['error'] = ' insrt problem. oops';
+                        }
+                        echo json_encode($json);
+});
+
+
+
+
+$app->get('/egor/delete_service', function() use ($app) {
+    $request = $app->request();
+   $service = $request->params('service');
+    $user_id = $request->params('user_id');
+   $balance = $request->params('balance');
+$mysqli = new mysqli("localhost", "egor", "egor", "egorDB");
+     $query = "DELETE from list where id='$service'";
+     $result = $mysqli->query($query);
+if($result == 1 ){
+                             $query = "UPDATE abonent SET balance = '$balance' where id='$user_id'";
+                             $result = $mysqli->query($query);
+                            $json['success'] = 'all ok!!!';
+                        }else{
+                            $json['error'] = ' insrt problem. oops';
+                        }
+                        echo json_encode($json);
+                        echo "   ";
+});
+
+
+
+$app->get('/egor/change_repair', function() use ($app) {
+   $request = $app->request();
+   $repair_id = $request->params('repair_id');
+       $type = $request->params('type');
+   $telephone = $request->params('telephone');
+    $time = $request->params('time');
+   $description = $request->params('description');
+
+$mysqli = new mysqli(****);     
+$query = "UPDATE repair SET type='$type', telephone='$telephone', time='$time', description='$description' WHERE id = '$repair_id'";
+$result = $mysqli->query($query);
+if($result == 1 ){
+                            $json['success'] = 'all ok!!!';
+                        }else{
+                            $json['error'] = $abonent_id;
+                        }
+                        echo json_encode($json);
+                        echo "   ";
+});
+
+
+$app->get('/egor/add_repair', function() use ($app) {
+   $request = $app->request();
+       $type = $request->params('type');
+   $telephone = $request->params('telephone');
+    $time = $request->params('time');
+   $abonent_id = $request->params('abonent_id');
+   $status = $request->params('status');
+   $description = $request->params('description');
+
+
+$mysqli = new mysqli(****);     
+$query = "INSERT into repair (type,telephone,time,abonent_id,status,description) values ( '$type','$telephone','$time','$abonent_id','$status','$description')";
+$result = $mysqli->query($query);
+if($result == 1 ){
+                            $json['success'] = 'all ok!!!';
+                        }else{
+                            $json['error'] = $abonent_id;
+                        }
+                        echo json_encode($json);
+                        echo "   ";
+});
+
+
+
+$app->get('/egor/add_service', function() use ($app) {
+   $request = $app->request();
+       $ontime = $request->params('ontime');
+   $offtime = $request->params('offtime');
+    $user_id = $request->params('user_id');
+   $service = $request->params('service');
+   $balance = $request->params('balance');
+
+
+$mysqli = new mysqli(****);     
+$query = "INSERT into list (ontime,offtime,abonent_id, usluga_id) values ( '$ontime','$offtime','$user_id','$service')";
+$result = $mysqli->query($query);
+if($result == 1 ){
+                            $query = "UPDATE abonent SET balance = '$balance' where id='$user_id'";
+                            $result = $mysqli->query($query);
+                            $json['success'] = 'all ok!!!';
+                        }else{
+                            $json['error'] = $user_id;
+                        }
+                        echo json_encode($json);
+                        echo "   ";
+});
+
+$app->get('/egor/get_login', function() use ($app) {
+    $request = $app->request();
+ $username = $request->params('username');
+  $password = $request->params('password');
+
+
+    $mysqli = new mysqli(****);
+        if($username!=null AND $password!=null){
+             $query = "SELECT * from abonent where username='$username' and password = '$password' ";
+             $result = $mysqli->query($query);
+             if(mysqli_num_rows($result)>0){
+                        while($row = $result->fetch_assoc()){
+                echo json_encode($row);
+            }
+            echo "   ";
+                    }else{
+                        $query = "SELECT * from abonent where username = '$username'";
+                         $result = $mysqli->query($query);
+                        if(mysqli_num_rows($result)>0){
+                        $json['error'] = ' wrong password for '.$username;
+                        echo json_encode($json);
+                    }}
+        }
+            else{$json['error'] = ' no params broo';
+            echo json_encode($json);
+            }
+            echo('   ');}
+);
+
+$app->get('/egor/delete_abonent', function() use ($app){
+
+     $request = $app->request();
+        $username = $request->params('username');
+
+if($username!=null){
+    $mysqli = new mysqli(****);
+     $query = "DELETE from abonent where username='$username'";
+     $result = $mysqli->query($query);
+ }
+
+});
+
+$app->get('/egor/change_abonent', function() use ($app){
+
+     $request = $app->request();
+        $oldusername = $request->params('oldusername');
+        $username = $request->params('username');
+        $password = $request->params('password');
+
+if($username!=null && $password!=null){
+    $mysqli = new mysqli(****);
+     $query = "UPDATE abonent SET username = '$username', password = '$password' where username='$oldusername'";
+     $result = $mysqli->query($query);
+     $query = "DELETE from abonent where username = 'null'";
+     $result = $mysqli->query($query);
+ }
+
+});
+
+
+
+$app->get('/egor/change_balance', function() use ($app){
+
+     $request = $app->request();
+        $balance = $request->params('balance');
+        $user_id = $request->params('user_id');
+        $service_id = $request->params('service_id');
+
+
+    $mysqli = new mysqli(****);
+     $query = "UPDATE abonent SET balance = '$balance' where id='$user_id'";
+     $result = $mysqli->query($query);
+     $query = "DELETE from list where id = '$service_id'";
+     $result = $mysqli->query($query);
+ 
+
+});
+
+
+
+
+
+$app->get('/egor/get_uslugaj', function() use ($app) {
+    $request = $app->request();
+    $mysqli = new mysqli(****);
+        
+
+        $return_arr = array();
+
+$query = "SELECT `id`,`name`,`cost`,`period` FROM usluga";
+            $result = $mysqli->query($query);
+
+while($row = $result->fetch_assoc()){
+    $row_array['id'] = $row['id'];
+    $row_array['name'] = $row['name'];
+    $row_array['cost'] = $row['cost'];
+    $row_array['period'] = $row['period'];
+
+    array_push($return_arr,$row_array);
+}
+echo json_encode($return_arr);
+echo "   ";
+}
+);
+
+$app->get('/egor/get_payments', function() use ($app) {
+
+    $request = $app->request();
+
+   $user_id = $request->params('user_id');
+
+    $mysqli = new mysqli(****);
+        //$id =  $app->request->get('id');
+
+    if ($result = $mysqli->query("SELECT * from `payment` where abonent_id = ".$user_id)) {
+        $tempArray = array();
+        $myArray = array();
+        while($row = $result->fetch_object()) {
+                $tempArray = $row;
+                array_push($myArray, $tempArray);
+            }
+        echo json_encode($myArray);
+    }
+            echo "   ";
+        });
+
+
+$app->get('/egor/get_repairs', function() use ($app) {
+
+    $request = $app->request();
+
+   $user_id = $request->params('user_id');
+
+    $mysqli = new mysqli(****);
+        //$id =  $app->request->get('id');
+
+    if ($result = $mysqli->query("SELECT * from `repair` where abonent_id = ".$user_id)) {
+        $tempArray = array();
+        $myArray = array();
+        while($row = $result->fetch_object()) {
+                $tempArray = $row;
+                array_push($myArray, $tempArray);
+            }
+        echo json_encode($myArray);
+    }
+            echo "   ";
+        });
+
+
+
+$app->get('/egor/get_abonentj', function() use ($app) {
+    $request = $app->request();
+    $username = $request->params('username');
+    $mysqli = new mysqli(****);
+        
+
+        $return_arr = array();
+if($username!=null){
+$query = "SELECT `id`,`username`,`password`,`balance`,`telephone` FROM abonent where `username`='$username'";
+          $result = $mysqli->query($query);}
+
+            while($row = $result->fetch_assoc()){
+                echo json_encode($row);
+            }
+            echo "   ";
+}
+);
+
+
+$app->get('/egor/get_repair', function() use ($app) {
+    $request = $app->request();
+    $repair_id = $request->params('repair_id');
+    $mysqli = new mysqli(****);
+        
+
+        $return_arr = array();
+
+$query = "SELECT * FROM repair where `id`='$repair_id'";
+          $result = $mysqli->query($query);
+
+            while($row = $result->fetch_assoc()){
+                echo json_encode($row);
+            }
+            echo "   ";
+}
+);
+
+$app->get('/egor/get_type', function() use ($app) {
+       $request = $app->request();
+
+
+    $mysqli = new mysqli(****);
+        //$id =  $app->request->get('id');
+
+    if ($result = $mysqli->query("SELECT * from type")) {
+        $tempArray = array();
+        $myArray = array();
+        while($row = $result->fetch_object()) {
+                $tempArray = $row;
+                array_push($myArray, $tempArray);
+            }
+        echo json_encode($myArray);
+    }
+            echo "   ";
+        });
+
+
+
+$app->get('/egor/get_abonent', function() use ($app) {
+    $request = $app->request();
+    $username = $request->params('username');
+
+    $mysqli = new mysqli(****);
+        //$id =  $app->request->get('id');
+
+        if($username!=null){
+            $query = "SELECT * FROM abonent WHERE username = ".$username;
+            $result = $mysqli->query($query);
+
+            while($row = $result->fetch_assoc()){
+                echo json_encode($row);
+            }
+            echo "   ";
+        }
+         else{
+            $query = "SELECT * FROM abonent";
+            $result = $mysqli->query($query);
+
+            while($row = $result->fetch_assoc()){
+                echo json_encode($row);
+            }
+            echo "   ";
+        }
+});
+
+$app->get('/egor/get_service', function() use ($app) {
+
+    $request = $app->request();
+
+   $username = $request->params('username');
+
+    $mysqli = new mysqli(****);
+        //$id =  $app->request->get('id');
+
+    if ($result = $mysqli->query("SELECT * from `list` where username = ".$username)) {
+        $tempArray = array();
+        $myArray = array();
+        while($row = $result->fetch_object()) {
+                $tempArray = $row;
+                array_push($myArray, $tempArray);
+            }
+        echo json_encode($myArray);
+    }
+            echo "   ";
+        });
+
+
+$app->get('/egor/get_service2', function() use ($app) {
+
+    $request = $app->request();
+
+   $username = $request->params('username');
+
+    $mysqli = new mysqli(****);
+        //$id =  $app->request->get('id');
+
+    if ($result = $mysqli->query("SELECT `list`.`id`,`ontime`,`offtime`,`usluga_id`,`uslugaq`.`name`,`uslugaq`.`period`,`uslugaq`.`cost` from `list`,(select `id`,`name`,`period`,`cost` from `usluga`) as `uslugaq` ,(select `id` from `abonent` where `username` = '$username') as `abonentq`
+                                where `uslugaq`.`id` = `usluga_id` and `abonentq`.`id`= `list`.`abonent_id`")) {
+        $tempArray = array();
+        $myArray = array();
+        while($row = $result->fetch_object()) {
+                $tempArray = $row;
+                array_push($myArray, $tempArray);
+            }
+        echo json_encode($myArray);
+    }
+
+    $result->close();
+    $mysqli->close();
+            echo "   ";
+        });
+
+
+
