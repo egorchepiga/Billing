@@ -39,7 +39,7 @@ $app->get('/egor/delete_service', function() use ($app) {
    $service = $request->params('service');
     $user_id = $request->params('user_id');
    $balance = $request->params('balance');
-$mysqli = new mysqli("localhost", "egor", "egor", "egorDB");
+$mysqli = new mysqli(****);
      $query = "DELETE from list where id='$service'";
      $result = $mysqli->query($query);
 if($result == 1 ){
