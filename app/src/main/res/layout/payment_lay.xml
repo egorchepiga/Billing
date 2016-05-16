@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/rv7"
+        android:layout_below="@+id/textView14"
+        android:layout_above="@+id/rur50">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50"
+        android:id="@+id/rur50"
+        android:onClick="add50rur"
+        android:layout_alignBottom="@+id/rur100"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100"
+        android:id="@+id/rur100"
+        android:onClick="add100rur"
+        android:layout_alignTop="@+id/rur200"
+        android:layout_toEndOf="@+id/rur50" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="200"
+        android:id="@+id/rur200"
+        android:onClick="add200rur"
+        android:layout_alignTop="@+id/rur500"
+        android:layout_toEndOf="@+id/rur100" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="500"
+        android:id="@+id/rur500"
+        android:onClick="add500rur"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/rur200"
+        android:layout_marginBottom="45dp" />
+
+</RelativeLayout>
